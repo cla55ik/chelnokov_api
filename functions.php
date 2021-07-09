@@ -5,7 +5,7 @@ function getProjects($connect){
   $projects = mysqli_query($connect, "SELECT * FROM `projects`");
   $projectsList = [];
 
-  
+
   while($project = mysqli_fetch_assoc($projects)){
     $projectsList[] = $project;
   }
@@ -37,10 +37,10 @@ function getProject($connect, $id){
 function addProject($connect, $data){
   $title = $data['title'];
   $description = $data['description'];
-  $img = $data['img'];
-  $stack = $data['stack'];
-  $url_site = $data['url_site'];
-  $url_git = $data['url_git'];
+  //$img = $data['img'];
+  //$stack = $data['stack'];
+  //$url_site = $data['url_site'];
+  //$url_git = $data['url_git'];
 
 
 
