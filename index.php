@@ -9,15 +9,38 @@ header("Access-Control-Max-Age", "3600");
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 header("Access-Control-Allow-Credentials", "true");
 
-require 'connect.php';
-require 'functions.php';
+include 'connect.php';
+include 'functions.php';
+//include 'sendform.php'
 
 $method = $_SERVER['REQUEST_METHOD'];
+if($method == 'GET'){
+  $q = $_GET['q'];
 
-$q = $_GET['q'];
+}elseif ($method == 'POST') {
+
+  $data = file_get_contents('php://input');
+  $data = json_decode($data, true);
+  $type = $data['type'];
+
+
+  if ($type == 'sendform') {
+    sendForm($data);
+  }
+  die();
+}
+
 $params = explode('/', $q);
 
 $type = $params[0];
+
+
+
+
+
+
+
+
 
 if (isset($params[1])) {
   $id = $params[1];
@@ -36,6 +59,7 @@ if ($method === 'GET') {
   }
 }elseif ($method === 'POST') {
   if ($type === 'projects') {
+    var_dump($_POST);
     addProject($connect, $_POST);
   }
 }elseif ($method === 'PATCH') {
@@ -51,5 +75,9 @@ if ($method === 'GET') {
     if(isset($id)){
       deleteProject($connect, $id);
     }
+  }
+}elseif ($method == 'POST') {
+  if ($type === 'sendform') {
+    sendForm($_POST);
   }
 }

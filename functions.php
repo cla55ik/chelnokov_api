@@ -91,3 +91,31 @@ function deleteProject($connect, $id){
 
   echo json_encode($res);
 }
+
+
+
+function sendForm($data){
+  http_response_code(200);
+
+  $name = $data['name'];
+  $phone = $data['phone'];
+  $sitetype = $data['sitetype'];
+  $description = $data['description'];
+
+  if($phone != ''){
+    $res=[
+      "status" => true,
+      "message" => 'sendForm = true',
+      "phone" => $phone
+    ];
+  }else{
+    $res = [
+      "status" => 'error',
+      "message" => 'Укажите номер телефона',
+      "phone" => $phone
+    ];
+  }
+
+
+  echo json_encode($res);
+}
