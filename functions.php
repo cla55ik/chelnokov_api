@@ -103,19 +103,41 @@ function sendForm($data){
   $description = $data['description'];
 
   if($phone != ''){
-    $res=[
-      "status" => true,
-      "message" => 'sendForm = true',
-      "phone" => $phone
+
+    $message = "Имя: ".$name."<br />".
+                "Телефон: ".$phone."<br />".
+                "Тип сайта: ".$sitetype."<br />".
+                "Подробности: ".$description."<br />";
+
+    sendToMail($message);
+    $res = [
+      "status" => 'ok',
+      "message" => 'Ваша заявка отправлена',
     ];
-  }else{
+
+  }elseif ($phone == '') {
     $res = [
       "status" => 'error',
       "message" => 'Укажите номер телефона',
-      "phone" => $phone
     ];
   }
 
 
   echo json_encode($res);
+}
+
+
+function sendToMail($message){
+  $to = "ivan5420@yandex.ru"; // емайл получателя данных из формы
+  $tema = "Заявка с сайта Chelnokov"; // тема полученного емайла
+
+  // заголовок письма
+        $headers= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-type: text/html; charset=utf-8\r\n"; // кодировка письма
+        $headers .= "From: Тестовое письмо <no-reply@test.com>\r\n"; // от кого письмо
+
+  mail($to, $tema, $message, $headers); //отправляет получателю на емайл значения переменных
+
+
+
 }

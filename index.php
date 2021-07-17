@@ -16,6 +16,7 @@ include 'functions.php';
 $method = $_SERVER['REQUEST_METHOD'];
 if($method == 'GET'){
   $q = $_GET['q'];
+  $params = explode('/', $q);
 
 }elseif ($method == 'POST') {
 
@@ -30,7 +31,7 @@ if($method == 'GET'){
   die();
 }
 
-$params = explode('/', $q);
+
 
 $type = $params[0];
 
