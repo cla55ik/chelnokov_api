@@ -11,29 +11,76 @@ header("Access-Control-Allow-Credentials", "true");
 
 include 'connect.php';
 include 'functions.php';
-//include 'sendform.php'
+
+//include($_SERVER['DOCUMENT_ROOT'] . '/objects/post.php');
+
+
 
 $method = $_SERVER['REQUEST_METHOD'];
+
 if($method == 'GET'){
   $q = $_GET['q'];
   $params = explode('/', $q);
+  $type = $params[0];
+
+  if ($type == 'projects') {
+    getProjects($connect);
+  }elseif ($type == 'admin') {
+    getProjectAdmin($connect);
+  }
 
 }elseif ($method == 'POST') {
+
+  include 'postAPI.php';
 
   $data = file_get_contents('php://input');
   $data = json_decode($data, true);
   $type = $data['type'];
 
 
+
   if ($type == 'sendform') {
+    include 'sendform.php';
     sendForm($data);
+  }elseif ($type == 'project') {
+    addProject($connect, $data);
   }
-  die();
+
+}elseif ($method == 'DELETE') {
+  $uri = $_SERVER['REQUEST_URI'];
+  $params = explode('/', $uri);
+  $type = $params[1];
+  $id = $params[2];
+  if ($type == 'projects' && isset($id)) {
+    deleteProject($connect, $id);
+  }
+
 }
 
 
 
-$type = $params[0];
+
+/*
+elseif ($method == 'DELETE') {
+  $params = split("/", substr(@$_SERVER['PATH_INFO'], 1));
+//  $params = explode('/', $q);
+  $type = $params[0];
+  $id = $params[1];
+
+  if ($type == 'projects') {
+    if (!isset($id)) {
+      $res = 'ID не получен';
+
+      echo json_encode($res);
+      die();
+    }else{
+      deleteProject($connect, $id)
+    }
+  }
+
+
+}
+*/
 
 
 
@@ -42,6 +89,8 @@ $type = $params[0];
 
 
 
+
+/*
 
 if (isset($params[1])) {
   $id = $params[1];
@@ -82,3 +131,4 @@ if ($method === 'GET') {
     sendForm($_POST);
   }
 }
+*/
