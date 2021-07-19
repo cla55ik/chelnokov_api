@@ -11,12 +11,78 @@ header("Access-Control-Allow-Credentials", "true");
 
 include 'connect.php';
 include 'functions.php';
+include 'classProject.php';
 
 //include($_SERVER['DOCUMENT_ROOT'] . '/objects/post.php');
 
 
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+$uri = $_SERVER['REQUEST_URI'];
+$data = file_get_contents('php://input');
+$params = explode('/', $uri);
+
+$type = $params[1];
+
+if ($type == 'sendform') {
+
+  $data = file_get_contents('php://input');
+  $data = json_decode($data, true);
+
+
+  include 'sendform.php';
+  sendForm($data);
+  }
+
+if ($type == 'projects') {
+  $project = new Project;
+
+switch ($method) {
+  case 'GET':
+    $project->getAll($connect);
+    break;
+  case 'POST':
+    $data = file_get_contents('php://input');
+    $data = json_decode($data, true);
+
+    $project->postOne($connect, $data);
+    break;
+  case 'DELETE':
+    $id = $params[2];
+    $project->deleteOne($connect, $id);
+    break;
+  default:
+    echo json_encode('unknown Request');
+    break;
+}
+
+}elseif ($type == 'admin' ) {
+  if($params[2] == 'projects'){
+    switch ($method) {
+      case 'GET':
+        $project = new Project;
+        $project->getAdminAll($connect);
+        break;
+
+      default:
+        echo json_encode('unknown Request');
+        break;
+    }
+
+
+  }
+}
+
+
+
+
+
+
+//echo json_encode($params);
+
+
+/*
 
 if($method == 'GET'){
   $q = $_GET['q'];
@@ -57,7 +123,7 @@ if($method == 'GET'){
 
 }
 
-
+*/
 
 
 /*
